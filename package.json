@@ -1,0 +1,17 @@
+{
+  "name": "amazon-link-converter",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^20.10.6",
+    "cheerio": "^1.0.0-rc.12",
+    "paapi5-nodejs-sdk": "^1.1.0",
+    "typescript": "^5.3.3"
+  }
+}
