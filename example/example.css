@@ -1,0 +1,84 @@
+/**
+ * HTMLテンプレートのCSS設定例
+ * クライアント側でグローバルCSSとして設定する
+ */
+@keyframes amazon-pa-api-items-animation {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 100;
+  }
+}
+.amazon-pa-api-items-root {
+  display: flex;
+  flex-wrap: wrap;
+}
+.amazon-pa-api-item {
+  width: 128px;
+  border: 1px solid #000000;
+  border-radius: 8px;
+  margin-right: 8px;
+  margin-bottom: 8px;
+  display: inline-block;
+
+  animation: "amazon-pa-api-items-animation" 0.7s ease 0s 1 normal;
+  transition: all 0.3s;
+  &:hover {
+    transform: translateY(-4px);
+  }
+  &:hover .amazon-pa-api-item-text-area {
+    background-color: #000000;
+  }
+}
+.amazon-pa-api-item-link {
+  text-decoration: none;
+  color: #ffffff;
+  padding: 4px 0px;
+}
+/** Amazonロゴ */
+.amazon-logo-img-wrapper {
+  width: 100%;
+  height: 20px;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 2px;
+}
+.amazon-logo-img {
+  height: 70%;
+}
+/** 商品画像 */
+.amazon-pa-api-item-img-wrapper {
+  width: 100%;
+  height: 120px;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.amazon-pa-api-item-img {
+  object-fit: cover;
+  height: 90%;
+}
+/** テキスト */
+.amazon-pa-api-item-text-area {
+  background-color: #000000;
+  padding: 4px 8px;
+}
+.amazon-pa-api-item-text-title {
+  font-size: 12px;
+  height: 80px;
+}
+.amazon-pa-api-item-text-price {
+  font-size: 11px;
+  text-align: right;
+  margin-top: 2px;
+}
+
+/** 商品画像単体 */
+.amazon-pa-api-img {
+  max-width: 100%;
+}
