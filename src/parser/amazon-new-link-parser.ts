@@ -1,4 +1,4 @@
-import { getAmazonItemInfo } from "../api/amazon-pa-api";
+import { getAmazonItemInfo } from "../api/amazon-paapi";
 import { AmazonParseSettings } from "../settings";
 
 /**
