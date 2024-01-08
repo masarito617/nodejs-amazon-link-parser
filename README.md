@@ -8,7 +8,7 @@
 ## 使用方法
 
 - サーバ側
-  - `./src/settings.ts`に各種設定を記述します。
+  - <a href="/src/settings.ts">settings.ts</a> に各種設定を記述します。
     - `FileSettings`: テキストファイルの格納パス
     - `AmazonPaApiSettings`: Amazon Product Adcertising API の設定
     - `AmazonParseSettings`: AmazonアイテムHTML変換設定(※必要に応じて修正)
