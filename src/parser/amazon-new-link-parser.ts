@@ -1,5 +1,5 @@
-import { getAmazonItemInfo } from '../api/amazon-pa.api';
-import { AmazonParseSettings } from '../settings';
+import { getAmazonItemInfo } from "../api/amazon-pa-api";
+import { AmazonParseSettings } from "../settings";
 
 /**
  * ASINからコンソール出力用HTMLを作成する
@@ -10,35 +10,35 @@ export async function CreateAmazonPrintHtml(asinIds: string[]) {
   // ASINから商品情報を取得
   const itemInfoArray = await getAmazonItemInfo(asinIds);
 
-  let result = '\n';
+  let result = "\n";
 
   // 商品アイテムHTMLを出力
   for (const asinId of asinIds) {
     const itemInfo = itemInfoArray.find(
-      (itemInfo) => itemInfo.asinId === asinId,
+      (itemInfo) => itemInfo.asinId === asinId
     );
     if (itemInfo) {
       result += `${AmazonParseSettings.CreateAmazonImageLinkHtmlString(
-        itemInfo,
+        itemInfo
       )}\n\n`;
       result += `${AmazonParseSettings.CreateAmazonImageTitleHtmlString(
-        itemInfo,
+        itemInfo
       )}\n\n`;
     } else {
-      console.error('not exist asinId item info => ' + asinId);
+      console.error("not exist asinId item info => " + asinId);
     }
   }
-  result += '==============================\n\n';
+  result += "==============================\n\n";
   for (const asinId of asinIds) {
     const itemInfo = itemInfoArray.find(
-      (itemInfo) => itemInfo.asinId === asinId,
+      (itemInfo) => itemInfo.asinId === asinId
     );
     if (itemInfo) {
       result += `${AmazonParseSettings.CraeteAmazonItemHtmlString(
-        itemInfo,
+        itemInfo
       )}\n\n`;
     } else {
-      console.error('not exist asinId item info => ' + asinId);
+      console.error("not exist asinId item info => " + asinId);
     }
   }
 
@@ -89,7 +89,7 @@ const GetImageAsinIdFromMarkdownLine = (line: string) => {
 export async function UpdateAmazonLinkAsync(postContent: string) {
   // MarkdownテキストからasinIdを取得
   let asinIds: string[] = [];
-  for (const line of postContent.split('\n')) {
+  for (const line of postContent.split("\n")) {
     let asinId = GetItemAsinIdFromMarkdownLine(line);
     if (asinId) {
       asinIds.push(asinId);
@@ -111,18 +111,18 @@ export async function UpdateAmazonLinkAsync(postContent: string) {
   // 商品アイテム情報からHTMLを生成して差し替える
   let isDoParseAmazonItem = false;
   let isDoParseAmazonImageLink = false;
-  let parsePostContent = '';
-  for (const line of postContent.split('\n')) {
+  let parsePostContent = "";
+  for (const line of postContent.split("\n")) {
     // 商品アイテムParse中の場合
     // 次の終了タグが来るまでの間、スキップする
     if (isDoParseAmazonItem) {
-      if (line === '</div>') {
+      if (line === "</div>") {
         isDoParseAmazonItem = false;
       }
       continue;
     }
     if (isDoParseAmazonImageLink) {
-      if (line === '</a>') {
+      if (line === "</a>") {
         isDoParseAmazonImageLink = false;
       }
       continue;
@@ -132,17 +132,17 @@ export async function UpdateAmazonLinkAsync(postContent: string) {
     let asinId = GetItemAsinIdFromMarkdownLine(line);
     if (asinId) {
       const itemInfo = itemInfoArray.find(
-        (itemInfo) => itemInfo.asinId === asinId,
+        (itemInfo) => itemInfo.asinId === asinId
       );
       if (itemInfo) {
-        parsePostContent += '\n';
+        parsePostContent += "\n";
         parsePostContent += `${AmazonParseSettings.CraeteAmazonItemHtmlString(
-          itemInfo,
+          itemInfo
         )}`;
         isDoParseAmazonItem = true;
         continue;
       } else {
-        console.error('not exist asinId item info => ' + asinId);
+        console.error("not exist asinId item info => " + asinId);
       }
     }
 
@@ -150,17 +150,17 @@ export async function UpdateAmazonLinkAsync(postContent: string) {
     asinId = GetImageLinkAsinIdFromMarkdownLine(line);
     if (asinId) {
       const itemInfo = itemInfoArray.find(
-        (itemInfo) => itemInfo.asinId === asinId,
+        (itemInfo) => itemInfo.asinId === asinId
       );
       if (itemInfo) {
-        parsePostContent += '\n';
+        parsePostContent += "\n";
         parsePostContent += `${AmazonParseSettings.CreateAmazonImageLinkHtmlString(
-          itemInfo,
+          itemInfo
         )}`;
         isDoParseAmazonImageLink = true;
         continue;
       } else {
-        console.error('not exist asinId item info => ' + asinId);
+        console.error("not exist asinId item info => " + asinId);
       }
     }
 
@@ -168,22 +168,22 @@ export async function UpdateAmazonLinkAsync(postContent: string) {
     asinId = GetImageAsinIdFromMarkdownLine(line);
     if (asinId) {
       const itemInfo = itemInfoArray.find(
-        (itemInfo) => itemInfo.asinId === asinId,
+        (itemInfo) => itemInfo.asinId === asinId
       );
       if (itemInfo) {
-        parsePostContent += '\n';
+        parsePostContent += "\n";
         parsePostContent += `${AmazonParseSettings.CreateAmazonImageHtmlString(
-          itemInfo,
+          itemInfo
         )}`;
         continue;
       } else {
-        console.error('not exist asinId item info => ' + asinId);
+        console.error("not exist asinId item info => " + asinId);
       }
     }
 
     // 上記以外の場合、元の行をそのまま追加
-    if (parsePostContent != '') {
-      parsePostContent += '\n';
+    if (parsePostContent != "") {
+      parsePostContent += "\n";
     }
     parsePostContent += line;
   }

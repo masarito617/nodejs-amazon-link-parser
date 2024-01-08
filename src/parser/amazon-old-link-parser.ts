@@ -1,6 +1,6 @@
-import * as cheerio from 'cheerio';
-import { getAmazonItemInfo } from '../api/amazon-pa.api';
-import { AmazonParseSettings } from '../settings';
+import * as cheerio from "cheerio";
+import { getAmazonItemInfo } from "../api/amazon-pa-api";
+import { AmazonParseSettings } from "../settings";
 
 /**
  * iframeタグのsrc値からasinIdを取得
@@ -11,12 +11,12 @@ import { AmazonParseSettings } from '../settings';
 const GetAsinIdFromIframeSrc = (src: string) => {
   if (
     src &&
-    src.indexOf('amazon-adsystem.com') >= 0 &&
-    src.indexOf('&asins=') >= 0
+    src.indexOf("amazon-adsystem.com") >= 0 &&
+    src.indexOf("&asins=") >= 0
   ) {
-    for (const param of src.split('&')) {
-      if (param.indexOf('asins=') >= 0) {
-        return param.replace('asins=', '');
+    for (const param of src.split("&")) {
+      if (param.indexOf("asins=") >= 0) {
+        return param.replace("asins=", "");
       }
     }
   }
@@ -32,12 +32,12 @@ const GetAsinIdFromIframeSrc = (src: string) => {
 const GetAsinIdFromImgSrc = (src: string) => {
   if (
     src &&
-    src.indexOf('amazon-adsystem.com') >= 0 &&
-    src.indexOf('&ASIN=') >= 0
+    src.indexOf("amazon-adsystem.com") >= 0 &&
+    src.indexOf("&ASIN=") >= 0
   ) {
-    for (const param of src.split('&')) {
-      if (param.indexOf('ASIN=') >= 0) {
-        return param.replace('ASIN=', '');
+    for (const param of src.split("&")) {
+      if (param.indexOf("ASIN=") >= 0) {
+        return param.replace("ASIN=", "");
       }
     }
   }
@@ -54,14 +54,14 @@ export async function ParseOldAmazonLinkAsync(htmlText: string) {
 
   // HTMLからasinIdを抽出
   let asinIds: string[] = [];
-  $('iframe').each((index: any, elem: any) => {
+  $("iframe").each((index: any, elem: any) => {
     // 商品画像リンク
     const asinId = GetAsinIdFromIframeSrc(elem.attribs?.src);
     if (asinId) {
       asinIds.push(asinId);
     }
   });
-  $('img').each((index: any, elem: any) => {
+  $("img").each((index: any, elem: any) => {
     // 商品画像単体
     const asinId = GetAsinIdFromImgSrc(elem.attribs?.src);
     if (asinId) {
@@ -78,37 +78,37 @@ export async function ParseOldAmazonLinkAsync(htmlText: string) {
   const itemInfoArray = await getAmazonItemInfo(asinIds);
 
   // 商品アイテム情報からHTMLを生成して差し替える
-  $('iframe').each((index: any, elem: any) => {
+  $("iframe").each((index: any, elem: any) => {
     // 商品画像リンク
     const asinId = GetAsinIdFromIframeSrc(elem.attribs?.src);
     if (asinId) {
       const itemInfo = itemInfoArray.find(
-        (itemInfo) => itemInfo.asinId === asinId,
+        (itemInfo) => itemInfo.asinId === asinId
       );
       // pタグ - iframeタグの順で格納されている場合、親要素ごと差し替える
       const targetElement =
-        $(elem.parent).prop('tagName') === 'P' ? elem.parent : elem;
+        $(elem.parent).prop("tagName") === "P" ? elem.parent : elem;
       if (itemInfo) {
         $(targetElement).replaceWith(
-          `\n${AmazonParseSettings.CraeteAmazonItemHtmlString(itemInfo)}\n`,
+          `\n${AmazonParseSettings.CraeteAmazonItemHtmlString(itemInfo)}\n`
         );
       } else {
         $(targetElement).remove(); // 商品がなければ削除する
-        console.error('remove element => ' + asinId);
+        console.error("remove element => " + asinId);
       }
     }
   });
-  $('img').each((index: any, elem: any) => {
+  $("img").each((index: any, elem: any) => {
     // 商品画像単体
     const asinId = GetAsinIdFromImgSrc(elem.attribs?.src);
     if (asinId) {
       // srcを差し替えてidを付与する
       const itemInfo = itemInfoArray.find(
-        (itemInfo) => itemInfo.asinId === asinId,
+        (itemInfo) => itemInfo.asinId === asinId
       );
       if (itemInfo) {
         $(elem).replaceWith(
-          `\n${AmazonParseSettings.CreateAmazonImageHtmlString(itemInfo)}\n`,
+          `\n${AmazonParseSettings.CreateAmazonImageHtmlString(itemInfo)}\n`
         );
       }
     }
@@ -126,10 +126,10 @@ export async function RemoveOldAmazonSponserLinkAsync(htmlText: string) {
   const $ = cheerio.load(htmlText);
 
   // ad-areaクラスが付与されたdivタグを削除
-  $('div').each((index: any, elem: any) => {
-    if (elem.attribs?.class?.indexOf('ad-area') >= 0) {
+  $("div").each((index: any, elem: any) => {
+    if (elem.attribs?.class?.indexOf("ad-area") >= 0) {
       $(elem).remove();
-      console.log('remove sponser link.');
+      console.log("remove sponser link.");
     }
   });
 
